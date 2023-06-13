@@ -51,7 +51,7 @@ class _PredModelState extends State<PredModel> {
     print(output[0][0]);
 
     this.setState(() {
-      predValue = output[0][0].toStringAsFixed(3).toString();
+      predValue = output[0][0].toStringAsFixed(3).toString() + " Pa";
     });
   }
 
@@ -69,105 +69,149 @@ class _PredModelState extends State<PredModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color(0xffe3c0ed),
         appBar: AppBar(
-          title: Text("DT Predictor"),
-          backgroundColor: Colors.blue,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(
-                      // optional flex property if flex is 1 because the default flex is 1
-                      flex: 1,
-                      child: TextField(
-                        key: Key("rh_text_field"),
-                        focusNode: _firstFocusNode,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(
-                              r'[,\s-]')), // Disallow comma, space, and minus sign
-                        ],
-                        controller: _RHController,
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (value) {
-                          // Move the focus to the second TextField when Done is pressed
-                          FocusScope.of(context).requestFocus(_secondFocusNode);
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'RH',
-                            labelStyle: TextStyle(color: Colors.grey[400])),
+            title: Text("DT Predictor"),
+            backgroundColor: const Color(0xff521662)),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Expanded(
+                        // optional flex property if flex is 1 because the default flex is 1
+                        flex: 1,
+                        child: TextField(
+                          key: Key("rh_text_field"),
+                          focusNode: _firstFocusNode,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(
+                                r'[,\s-]')), // Disallow comma, space, and minus sign
+                          ],
+                          controller: _RHController,
+                          textInputAction: TextInputAction.done,
+                          onSubmitted: (value) {
+                            // Move the focus to the second TextField when Done is pressed
+                            FocusScope.of(context)
+                                .requestFocus(_secondFocusNode);
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'RH',
+                              labelStyle:
+                                  TextStyle(color: const Color(0xff310d3b))),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                      // optional flex property if flex is 1 because the default flex is 1
-                      flex: 1,
-                      child: TextField(
-                        key: Key("upv_text_field"),
-                        focusNode: _secondFocusNode,
-                        controller: _UPVController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(
-                              r'[,\s-]')), // Disallow comma, space, and minus sign
-                        ],
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (value) {
-                          // Move the focus to the second TextField when Done is pressed
-                          FocusScope.of(context).requestFocus(_thirdFocusNode);
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'UPV',
-                            labelStyle: TextStyle(color: Colors.grey[400])),
+                      SizedBox(width: 10.0),
+                      Expanded(
+                        // optional flex property if flex is 1 because the default flex is 1
+                        flex: 1,
+                        child: TextField(
+                          key: Key("upv_text_field"),
+                          focusNode: _secondFocusNode,
+                          controller: _UPVController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(
+                                r'[,\s-]')), // Disallow comma, space, and minus sign
+                          ],
+                          textInputAction: TextInputAction.done,
+                          onSubmitted: (value) {
+                            // Move the focus to the second TextField when Done is pressed
+                            FocusScope.of(context)
+                                .requestFocus(_thirdFocusNode);
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'UPV',
+                              labelStyle:
+                                  TextStyle(color: const Color(0xff310d3b))),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(
-                      // optional flex property if flex is 1 because the default flex is 1
-                      flex: 1,
-                      child: TextField(
-                        key: Key("stype_text_field"),
-                        focusNode: _thirdFocusNode,
-                        controller: _STypeController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(
-                              r'[,\s-]')), // Disallow comma, space, and minus sign
-                        ],
-                        onSubmitted: (value) {
-                          // Move the focus to the second TextField when Done is pressed
-                          FocusScope.of(context).requestFocus(_fourthFocusNode);
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Sand Type',
-                            labelStyle: TextStyle(color: Colors.grey[400])),
+                    ],
+                  ),
+                  SizedBox(height: 12.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Expanded(
+                        // optional flex property if flex is 1 because the default flex is 1
+                        flex: 1,
+                        child: TextField(
+                          key: Key("stype_text_field"),
+                          focusNode: _thirdFocusNode,
+                          controller: _STypeController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(
+                                r'[,\s-]')), // Disallow comma, space, and minus sign
+                          ],
+                          onSubmitted: (value) {
+                            // Move the focus to the second TextField when Done is pressed
+                            FocusScope.of(context)
+                                .requestFocus(_fourthFocusNode);
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'Sand Type',
+                              labelStyle:
+                                  TextStyle(color: const Color(0xff310d3b))),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 10.0),
-                    Expanded(
-                      // optional flex property if flex is 1 because the default flex is 1
-                      flex: 1,
-                      child: TextField(
-                        key: Key("ctype_text_field"),
-                        focusNode: _fourthFocusNode,
-                        controller: _CTypeController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.deny(RegExp(
-                              r'[,\s-]')), // Disallow comma, space, and minus sign
-                        ],
-                        textInputAction: TextInputAction.done,
-                        onSubmitted: (value) {
+                      SizedBox(width: 10.0),
+                      Expanded(
+                        // optional flex property if flex is 1 because the default flex is 1
+                        flex: 1,
+                        child: TextField(
+                          key: Key("ctype_text_field"),
+                          focusNode: _fourthFocusNode,
+                          controller: _CTypeController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.deny(RegExp(
+                                r'[,\s-]')), // Disallow comma, space, and minus sign
+                          ],
+                          textInputAction: TextInputAction.done,
+                          onSubmitted: (value) {
+                            double val;
+
+                            try {
+                              val = double.parse(_RHController.text);
+                            } catch (e) {
+                              val = 0.0;
+                            }
+                            predData(val);
+                          },
+                          decoration: InputDecoration(
+                              labelText: 'Cement Type',
+                              labelStyle:
+                                  TextStyle(color: const Color(0xff310d3b))),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 32),
+                  Text(
+                    "Predicted Value :  $predValue ",
+                    style:
+                        TextStyle(color: const Color(0xff310d3b), fontSize: 23),
+                  ),
+                  SizedBox(height: 32.0),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: MaterialButton(
+                        color: Color(0xff521662),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Adjust the radius as needed
+                        ),
+                        child: Text(
+                          "PREDICT",
+                          style: TextStyle(fontSize: 24, color: Colors.white),
+                        ),
+                        onPressed: () {
                           double val;
 
                           try {
@@ -176,54 +220,34 @@ class _PredModelState extends State<PredModel> {
                             val = 0.0;
                           }
                           predData(val);
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Cement Type',
-                            labelStyle: TextStyle(color: Colors.grey[400])),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12.0),
-                MaterialButton(
-                    color: Colors.blue,
-                    child: Text(
-                      "PREDICT",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    onPressed: () {
-                      double val;
-
-                      try {
-                        val = double.parse(_RHController.text);
-                      } catch (e) {
-                        val = 0.0;
-                      }
-                      predData(val);
-                    }),
-                SizedBox(height: 12),
-                Text(
-                  "Predicted Value :  $predValue ",
-                  style: TextStyle(color: Colors.red, fontSize: 23),
-                ),
-                SizedBox(height: 12),
-                MaterialButton(
-                    color: Colors.blue,
-                    child: Text(
-                      "CLEAR",
-                      style: TextStyle(fontSize: 25),
-                    ),
-                    onPressed: () {
-                      // initState();
-                      _RHController.clear();
-                      _UPVController.clear();
-                      _STypeController.clear();
-                      _CTypeController.clear();
-                      setState(() {
-                        predValue = "click predict button";
-                      });
-                    }),
-              ],
+                        }),
+                  ),
+                  SizedBox(height: 12),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: MaterialButton(
+                        color: Color(0xff521662),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Adjust the radius as needed
+                        ),
+                        child: Text(
+                          "CLEAR",
+                          style: TextStyle(fontSize: 24, color: Colors.white),
+                        ),
+                        onPressed: () {
+                          // initState();
+                          _RHController.clear();
+                          _UPVController.clear();
+                          _STypeController.clear();
+                          _CTypeController.clear();
+                          setState(() {
+                            predValue = "";
+                          });
+                        }),
+                  ),
+                ],
+              ),
             ),
           ),
         ));
