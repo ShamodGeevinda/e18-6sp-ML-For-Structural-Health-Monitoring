@@ -41,17 +41,19 @@ class _PredModelState extends State<PredModel> {
     super.dispose();
   }
 
-  Future<void> predData(val) async {
-    final interpreter = await Interpreter.fromAsset('predmodel.tflite');
+  Future<void> predData(RH, UPV, SandT, CementT) async {
+    final interpreter =
+        await Interpreter.fromAsset('linear_regression_model.tflite');
+    // final interpreter = await Interpreter.fromAsset('predmodel.tflite');
     var input = [
-      [val, 300.0, 1695.0, 3736.0, 5340.0]
+      [RH, UPV, SandT, CementT]
     ];
     var output = List.filled(1, 0).reshape([1, 1]);
     interpreter.run(input, output);
     print(output[0][0]);
 
     this.setState(() {
-      predValue = output[0][0].toStringAsFixed(3).toString() + " Pa";
+      predValue = (output[0][0] / 10).toStringAsFixed(3).toString() + " Pa";
     });
   }
 
@@ -175,14 +177,20 @@ class _PredModelState extends State<PredModel> {
                           ],
                           textInputAction: TextInputAction.done,
                           onSubmitted: (value) {
-                            double val;
+                            double RH, UPV, SandT, CementT;
 
                             try {
-                              val = double.parse(_RHController.text);
+                              RH = double.parse(_RHController.text);
+                              UPV = double.parse(_UPVController.text);
+                              SandT = double.parse(_STypeController.text);
+                              CementT = double.parse(_CTypeController.text);
                             } catch (e) {
-                              val = 0.0;
+                              RH = 0.0;
+                              UPV = 0.0;
+                              SandT = 0.0;
+                              CementT = 0.0;
                             }
-                            predData(val);
+                            predData(RH, UPV, SandT, CementT);
                           },
                           decoration: InputDecoration(
                               labelText: 'Cement Type',
@@ -212,14 +220,20 @@ class _PredModelState extends State<PredModel> {
                           style: TextStyle(fontSize: 24, color: Colors.white),
                         ),
                         onPressed: () {
-                          double val;
+                          double RH, UPV, SandT, CementT;
 
                           try {
-                            val = double.parse(_RHController.text);
+                            RH = double.parse(_RHController.text);
+                            UPV = double.parse(_UPVController.text);
+                            SandT = double.parse(_STypeController.text);
+                            CementT = double.parse(_CTypeController.text);
                           } catch (e) {
-                            val = 0.0;
+                            RH = 0.0;
+                            UPV = 0.0;
+                            SandT = 0.0;
+                            CementT = 0.0;
                           }
-                          predData(val);
+                          predData(RH, UPV, SandT, CementT);
                         }),
                   ),
                   SizedBox(height: 12),
@@ -244,6 +258,7 @@ class _PredModelState extends State<PredModel> {
                           setState(() {
                             predValue = "";
                           });
+                          FocusScope.of(context).requestFocus(_firstFocusNode);
                         }),
                   ),
                 ],
