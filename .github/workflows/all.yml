@@ -38,7 +38,7 @@ jobs:
           sarif_file: mobsfscan.sarif
 
       - name: Run MobSF Analysis on APK
-        uses: MobSF/mobsfscan@3d87bc570c4614d705547bddb521395663dba353 #0.4.5
+        uses: MobSF/mobsfscan@a60d10a83af68e23e0b30611c6515da604f06f65
         with:
           args: 'InsecureBankv2.apk --sarif -o report-apk-scan.sarif --config .mobsf || true'
 
