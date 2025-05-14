@@ -46,17 +46,22 @@ jobs:
       ##############################################
       # Dart Code Metrics
       ##############################################
-      - name: Setup Dart
-        uses: dart-lang/setup-dart@v1
+            ##############################################
+      # Dart Code Metrics (for Flutter project)
+      ##############################################
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'  # or your required version
 
       - name: Install Dart Code Metrics
-        run: dart pub global activate dart_code_metrics
+        run: flutter pub global activate dart_code_metrics
 
       - name: Run Dart Code Metrics
         working-directory: code/DT Predictor
         run: |
-          dart pub get
-          dart pub global run dart_code_metrics:metrics analyze lib --reporter=sarif > dart-metrics.sarif || true
+          flutter pub get
+          flutter pub global run dart_code_metrics:metrics analyze lib --reporter=sarif > ../../dart-metrics.sarif || true
 
       - name: Upload Dart Metrics SARIF to Code Scanning
         uses: github/codeql-action/upload-sarif@v3
@@ -68,6 +73,7 @@ jobs:
         with:
           name: dart-code-metrics-results
           path: dart-metrics.sarif
+
 
       ##############################################
       # OWASP Dependency-Check
