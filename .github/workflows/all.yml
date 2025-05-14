@@ -54,6 +54,12 @@ jobs:
           sarif_file: report-apk-scan.sarif
           category: apk-scanning
 
+      - name: Upload MobSF Analysis on APK result (if generated)
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-scan-result
+          path: report-apk-scan.sarif
+
       ##############################################
       # OWASP Dependency-Check
       ##############################################
@@ -84,8 +90,8 @@ jobs:
 
       - name: Run APKLeaks (if APK exists)
         run: |
-          if [ -f build/app/outputs/flutter-apk/app-release.apk ]; then
-            apkleaks -f build/app/outputs/flutter-apk/app-release.apk -o apkleaks_output.txt || true
+          if [ -f InsecureBankv2.apk ]; then
+            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt || true
           else
             echo "APK not found. Skipping APKLeaks."
           fi
