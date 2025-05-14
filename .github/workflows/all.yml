@@ -1,0 +1,113 @@
+name: MobSF
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-security:
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+
+      ##############################################
+      # MobSFScan
+      ##############################################
+      - name: Run mobsfscan
+        uses: MobSF/mobsfscan@a60d10a83af68e23e0b30611c6515da604f06f65
+        with:
+          args: . --sarif --output mobsfscan.sarif || true
+
+      - name: Upload mobsfscan SARIF to Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: mobsfscan.sarif
+
+      - name: Upload mobsfscan SARIF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobsfscan-results
+          path: mobsfscan.sarif
+
+      ##############################################
+      # Dart Code Metrics
+      ##############################################
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+
+      - name: Install Dart Code Metrics
+        run: dart pub global activate dart_code_metrics
+
+      - name: Run Dart Code Metrics
+        run: |
+          dart pub get
+          dart pub global run dart_code_metrics:metrics analyze lib --reporter=sarif > dart-metrics.sarif || true
+
+      - name: Upload Dart Metrics SARIF to Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: dart-metrics.sarif
+
+      - name: Upload Dart Metrics SARIF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dart-code-metrics-results
+          path: dart-metrics.sarif
+
+      ##############################################
+      # OWASP Dependency-Check
+      ##############################################
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'flutter-app'
+          format: 'SARIF'
+          out: 'dependency-check'
+          scan: '.'
+
+      - name: Upload Dependency Check SARIF to Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: dependency-check/dependency-check-report.sarif
+
+      - name: Upload Dependency Check SARIF as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-results
+          path: dependency-check/dependency-check-report.sarif
+
+      ##############################################
+      # APKLeaks (optional APK secret scan)
+      ##############################################
+      - name: Install APKLeaks
+        run: pip install apkleaks
+
+      - name: Run APKLeaks (if APK exists)
+        run: |
+          if [ -f build/app/outputs/flutter-apk/app-release.apk ]; then
+            apkleaks -f build/app/outputs/flutter-apk/app-release.apk -o apkleaks_output.txt || true
+          else
+            echo "APK not found. Skipping APKLeaks."
+          fi
+
+      - name: Upload APKLeaks result (if generated)
+        uses: actions/upload-artifact@v4
+        with:
+          name: apkleaks-result
+          path: apkleaks_output.txt
