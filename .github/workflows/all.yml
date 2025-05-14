@@ -85,16 +85,14 @@ jobs:
       ##############################################
       # APKLeaks (optional APK secret scan)
       ##############################################
-      - name: Install APKLeaks
-        run: pip install apkleaks
-
       - name: Install APKLeaks and jadx
         run: |
           pip install apkleaks
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip
-          unzip jadx-1.4.7.zip
+          unzip -o -q jadx-1.4.7.zip
           sudo mv jadx-1.4.7/bin/jadx /usr/local/bin/
           sudo chmod +x /usr/local/bin/jadx
+
 
 
       - name: Run APKLeaks (if APK exists)
