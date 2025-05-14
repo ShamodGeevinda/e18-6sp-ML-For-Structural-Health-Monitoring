@@ -18,9 +18,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Setup python
+      - name: Setup Python
         uses: actions/setup-python@v3
         with:
           python-version: 3.8
@@ -37,10 +38,12 @@ jobs:
 
       - name: Upload SARIF as artifact
         uses: actions/upload-artifact@v4
+        with:
+          name: mobsfscan-results
+          path: results.sarif
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v1.0.0
-
         with:
           name: mobsfscan-results
           path: results.sarif
