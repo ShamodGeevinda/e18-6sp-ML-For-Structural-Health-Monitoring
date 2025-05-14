@@ -90,19 +90,20 @@ jobs:
           pip install apkleaks
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip -O jadx.zip
           unzip -o -q jadx.zip -d jadx-dist
-          echo "jadx installed in ./jadx-dist"
+          chmod +x jadx-dist/bin/jadx
+          echo "$PWD/jadx-dist/bin" >> $GITHUB_PATH
 
       - name: Run APKLeaks (if APK exists)
         run: |
           if [ -f InsecureBankv2.apk ]; then
-            chmod +x jadx-dist/bin/jadx
-            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt --jadx ./jadx-dist/bin/jadx || true
+            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt || true
           else
             echo "APK not found. Skipping APKLeaks."
           fi
 
-      - name: Upload APKLeaks result (if generated)
+      - name: Upload APKLeaks result
         uses: actions/upload-artifact@v4
         with:
           name: apkleaks-result
           path: apkleaks_output.txt
+
