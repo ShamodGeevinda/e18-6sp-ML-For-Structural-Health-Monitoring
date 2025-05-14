@@ -53,6 +53,7 @@ jobs:
         run: dart pub global activate dart_code_metrics
 
       - name: Run Dart Code Metrics
+        working-directory: code/DT Predictor
         run: |
           dart pub get
           dart pub global run dart_code_metrics:metrics analyze lib --reporter=sarif > dart-metrics.sarif || true
