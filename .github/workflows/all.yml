@@ -1,4 +1,4 @@
-name: MobSF
+name: all
 
 on:
   workflow_dispatch:
