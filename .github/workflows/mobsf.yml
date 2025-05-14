@@ -37,6 +37,10 @@ jobs:
 
       - name: Upload SARIF as artifact
         uses: actions/upload-artifact@v4
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v1.0.0
+
         with:
           name: mobsfscan-results
           path: results.sarif
