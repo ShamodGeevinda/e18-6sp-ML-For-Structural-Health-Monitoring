@@ -91,15 +91,12 @@ jobs:
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip -O jadx.zip
           mkdir -p jadx-bin
           unzip -o -q jadx.zip -d jadx-bin
-          sudo mv jadx-bin/bin/jadx /usr/local/bin/
-          sudo chmod +x /usr/local/bin/jadx
-
-
+          echo "JADX installed to ./jadx-bin"
 
       - name: Run APKLeaks (if APK exists)
         run: |
           if [ -f InsecureBankv2.apk ]; then
-            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt || true
+            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt --jadx ./jadx-bin/bin/jadx || true
           else
             echo "APK not found. Skipping APKLeaks."
           fi
