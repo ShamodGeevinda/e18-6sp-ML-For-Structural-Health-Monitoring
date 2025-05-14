@@ -85,18 +85,18 @@ jobs:
       ##############################################
       # APKLeaks (optional APK secret scan)
       ##############################################
-      - name: Install APKLeaks and jadx
+      - name: Install APKLeaks and JADX
         run: |
           pip install apkleaks
           wget https://github.com/skylot/jadx/releases/download/v1.4.7/jadx-1.4.7.zip -O jadx.zip
-          mkdir -p jadx-bin
-          unzip -o -q jadx.zip -d jadx-bin
-          echo "JADX installed to ./jadx-bin"
+          unzip -o -q jadx.zip -d jadx-dist
+          echo "jadx installed in ./jadx-dist"
 
       - name: Run APKLeaks (if APK exists)
         run: |
           if [ -f InsecureBankv2.apk ]; then
-            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt --jadx ./jadx-bin/bin/jadx || true
+            chmod +x jadx-dist/bin/jadx
+            apkleaks -f InsecureBankv2.apk -o apkleaks_output.txt --jadx ./jadx-dist/bin/jadx || true
           else
             echo "APK not found. Skipping APKLeaks."
           fi
